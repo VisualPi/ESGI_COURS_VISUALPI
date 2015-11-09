@@ -1,0 +1,15 @@
+﻿La génération a démarré 07/11/2015 21:07:36.
+     1>Projet "C:\Users\Kevin\Desktop\OpenGL5A\ObjLoader\ObjLoader.vcxproj" sur le nœud 2 (Build cible(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\Libs /I..\Libs\freeglut\include /I"..\Libs\glew-1.13.0\include" /I..\Libs\glm /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ObjLoader.cpp
+         ObjLoader.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Kevin\Desktop\OpenGL5A\Debug\ObjLoader.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\Libs\freeglut\lib /LIBPATH:"..\Libs\glew-1.13.0\lib\Release\Win32" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Kevin\Desktop\OpenGL5A\Debug\ObjLoader.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Kevin\Desktop\OpenGL5A\Debug\ObjLoader.lib" /MACHINE:X86 Debug\EsgiShader.obj
+         Debug\tiny_obj_loader.obj
+         Debug\ObjLoader.obj
+         ObjLoader.vcxproj -> C:\Users\Kevin\Desktop\OpenGL5A\Debug\ObjLoader.exe
+     1>Génération du projet "C:\Users\Kevin\Desktop\OpenGL5A\ObjLoader\ObjLoader.vcxproj" terminée (Build cible(s)).
+
+La génération a réussi.
+
+Temps écoulé 00:00:01.54

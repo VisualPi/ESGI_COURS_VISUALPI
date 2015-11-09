@@ -1,0 +1,16 @@
+﻿La génération a démarré 08/11/2015 23:58:01.
+     1>Projet "D:\ESGI\5A_GIT_REPOS\trunk\OPEN_GL\PROJET_10-11-2015\RotatingCubes01\RotatingCubes01.vcxproj" sur le nœud 2 (Rebuild cible(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I..\Libs /I..\Libs\freeglut\include /I"..\Libs\glew-1.13.0\include" /I..\Libs\glm /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt ..\common\EsgiShader.cpp ..\Libs\tinyobjloader\tiny_obj_loader.cc RotatingCubes01.cpp
+         RotatingCubes01.cpp
+     1>d:\esgi\5a_git_repos\trunk\open_gl\projet_10-11-2015\rotatingcubes01\rotatingcubes01.cpp(28): fatal error C1083: Impossible d'ouvrir le fichier include : '../common/EsgiShader.h' : No such file or directory
+         tiny_obj_loader.cc
+     1>c1xx : fatal error C1083: Impossible d'ouvrir le fichier source : '..\Libs\tinyobjloader\tiny_obj_loader.cc' : No such file or directory
+         EsgiShader.cpp
+     1>c1xx : fatal error C1083: Impossible d'ouvrir le fichier source : '..\common\EsgiShader.cpp' : No such file or directory
+         Génération de code en cours...
+     1>Génération du projet "D:\ESGI\5A_GIT_REPOS\trunk\OPEN_GL\PROJET_10-11-2015\RotatingCubes01\RotatingCubes01.vcxproj" terminée (Rebuild cible(s)) -- ÉCHEC.
+
+ÉCHEC de la build.
+
+Temps écoulé 00:00:00.46
