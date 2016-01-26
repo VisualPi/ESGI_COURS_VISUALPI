@@ -93,109 +93,78 @@ bool LoadAndCreateTextureRGBA(const char *filename, GLuint &texID)
 	return ( data != nullptr );
 }
 
-//
-
 void InitCube()
 {
 	std::string inputfile = "cube03.obj";
-	std::vector<tinyobj::shape_t> shapes;
-	std::vector<tinyobj::material_t> materials;
+	std::vector<tinyobj::shape_t> v_shapes;
+	std::vector<tinyobj::material_t> v_materials;
 
-	std::string err = tinyobj::LoadObj(shapes, materials, inputfile.c_str());
+	std::string err = tinyobj::LoadObj(v_shapes, v_materials, inputfile.c_str());
 
-	if (!err.empty())
+	const std::vector<unsigned int>& v_indices	= v_shapes[0].mesh.indices;
+	const std::vector<float>& v_positions		= v_shapes[0].mesh.positions;
+	const std::vector<float>& v_normals			= v_shapes[0].mesh.normals;
+	const std::vector<float>& v_texcoords		= v_shapes[0].mesh.texcoords;
+
+	size_t nbElement = v_positions.size();
+
+	hasNormals = true;
+	nbElement += v_normals.size();
+	std::cout << "Normals - OK" << std::endl;
+	if (!LoadAndCreateTextureRGBA("texture.png", g_Cube.textureObj))
 	{
-		std::cout << err << std::endl;
+		std::cout << "Erreur chargement texture !" << std::endl;
 		std::cin.ignore();
 		exit(-1);
 	}
 	else
-		std::cout << "Chargement .obj - OK" << std::endl;
-
-	const std::vector<unsigned int>& indices = shapes[0].mesh.indices;
-	const std::vector<float>& positions = shapes[0].mesh.positions;
-	const std::vector<float>& normals = shapes[0].mesh.normals;
-	const std::vector<float>& texcoords = shapes[0].mesh.texcoords;
-
-	int nbElement = positions.size();
-
-	if (normals.size() > 0)
 	{
-		hasNormals = true;
-		nbElement += normals.size();
-		std::cout << "Normals - OK" << std::endl;
+		hasTexCoord = true;
+		nbElement += v_texcoords.size();
+		std::cout << "TexCoord + Chargement texture - OK" << std::endl;
 	}
-	else
-		std::cout << "Le fichier .obj n'a pas de normals" << std::endl;
-
-	if (texcoords.size() > 0)
-	{
-		// Texture 
-		if (!LoadAndCreateTextureRGBA("texture.png", g_Cube.textureObj))
-			//if (!LoadAndCreateTextureRGBA("umineko2.png", g_Cube.textureObj))
-		{
-			std::cout << "Erreur chargement texture !" << std::endl;
-			std::cin.ignore();
-			exit(-1);
-		}
-		else
-		{
-			hasTexCoord = true;
-			nbElement += texcoords.size();
-			std::cout << "TexCoord + Chargement texture - OK" << std::endl;
-		}
-	}
-	else
-		std::cout << "Le fichier .obj n'a pas de texCoord" << std::endl;
 
 	g_Cube.position = glm::vec3(0.f, 0.f, 20.f);
-	g_Cube.ElementCount = indices.size();
-
-	// VBO
+	g_Cube.ElementCount = v_indices.size();
 	glGenBuffers(1, &g_Cube.VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, g_Cube.VBO);
 	glBufferData(GL_ARRAY_BUFFER, ( sizeof(float) * nbElement ), NULL, GL_STATIC_DRAW);
 
 	float* data = static_cast<float*>( glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY) );
 
-	int iVertex = 0;
-	int iNormals = 0;
-	int iTexCoords = 0;
+	size_t vertex = 0;
+	size_t normals = 0;
+	size_t texCoords = 0;
 
-	int iteration = 0;
 
-	for (int i = 0; i < nbElement; ++i)
+	for (size_t i = 0, j = 0; i < nbElement; ++i, ++j)
 	{
-		if (iteration >= 8)
-			iteration = 0;
+		if (j >= 8)
+			j = 0;
 
-		if (iteration >= 0 && iteration <= 2)
+		if (j >= 0 && j <= 2)
 		{
-			data[i] = positions[iVertex];
-			++iVertex;
+			data[i] = v_positions[vertex];
+			++vertex;
 		}
 
-		if (hasNormals && ( iteration >= 3 && iteration <= 5 ))
+		if (hasNormals && ( j >= 3 && j <= 5 ))
 		{
-			data[i] = normals[iNormals];
-			++iNormals;
+			data[i] = v_normals[normals];
+			++normals;
 		}
 
-		if (hasTexCoord && ( iteration >= 6 && iteration <= 7 ))
+		if (hasTexCoord && ( j >= 6 && j <= 7 ))
 		{
-			data[i] = texcoords[iTexCoords];
-			++iTexCoords;
+			data[i] = v_texcoords[texCoords];
+			++texCoords;
 		}
-
-		++iteration;
 	}
 
 	glUnmapBuffer(GL_ARRAY_BUFFER);
-
-	// IBO
 	glGenBuffers(1, &g_Cube.IBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g_Cube.IBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), &indices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * v_indices.size(), &v_indices[0], GL_STATIC_DRAW);
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -332,29 +301,21 @@ void Render()
 	glUniformMatrix4fv(worldLocation, 1, GL_FALSE, glm::value_ptr(transform));
 
 
-	// Layout (0) pour l'attribut des vertex
 	glBindVertexArray(g_Cube.VAO);
-	//glBindBuffer(GL_ARRAY_BUFFER, g_Cube.VBO);
 	glBindVertexArray(g_Cube.IBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g_Cube.IBO);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, 0);
 
-	if (hasNormals)
-	{
-		// Layout (1) pour l'attribut des normales
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, 0);
-	}
-	if (hasTexCoord)
-	{
-		// Layout (2) pour l'attribut des coordonnées UV
-		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, 0);
 
-		auto textureLocation = glGetUniformLocation(program, "u_texture");
-		glUniform1i(textureLocation, 0);
-	}
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, 0);
+
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, 0);
+
+	auto textureLocation = glGetUniformLocation(program, "u_texture");
+	glUniform1i(textureLocation, 0);
 
 	glDrawElements(GL_TRIANGLES, g_Cube.ElementCount, GL_UNSIGNED_INT, 0);
 

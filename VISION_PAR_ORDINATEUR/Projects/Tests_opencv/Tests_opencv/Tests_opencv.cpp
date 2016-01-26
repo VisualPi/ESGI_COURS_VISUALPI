@@ -53,13 +53,26 @@ int main(int argc, char** argv)
 
 
 
-	cv::imshow("Image", image);
-	cv::imshow("Gray", gray);
-	cv::imshow("treshold", t);
-	cv::imshow("B", channels[0]);
-	cv::imshow("G", channels[1]);
-	cv::imshow("R", channels[2]);
-	cv::waitKey(0);
+	//cv::imshow("Image", image);
+	//cv::imshow("Gray", gray);
+	//cv::imshow("treshold", t);
+	//cv::imshow("B", channels[0]);
+	//cv::imshow("G", channels[1]);
+	//cv::imshow("R", channels[2]);
+	//cv::imshow("H", hsv_channels[0]);
+	//cv::imshow("S", hsv_channels[1]);
+	//cv::imshow("V", hsv_channels[2]);
+	//cv::waitKey(0);
 
+	///Exo6
+	cv::cvtColor(image, hsv, CV_BGR2HSV);
+	cv::split(hsv, hsv_channels);
+	cv::Mat mask = ( hsv_channels[0] > 40 )&( hsv_channels[0] < 80 );
+	hsv_channels[1] = hsv_channels[1] & mask;
+	cv::merge(hsv_channels, hsv);
+	cv::cvtColor(hsv, image, CV_HSV2BGR);
+	cv::imshow("Green", image);
+
+	cv::waitKey(0);
 	return 0;
 }
